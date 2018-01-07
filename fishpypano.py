@@ -5,6 +5,7 @@ from scipy.optimize import basinhopping
 import json
 from PIL import Image
 import struct
+import PIL.ExifTags
 
 
 class DualSphereImg:
@@ -51,10 +52,41 @@ class DualSphereImg:
         mat = self.rotateZ(z).dot(mat)
         return mat
 
-    def load_calibration(self):
-        with open(self.calib_data_json_path) as f:
-            json_data = json.load(f)
+    def reset_calibration(self):
+        reset_json = {
+            "left_circle": {
+                "center": [
+                    (3456 * .5),
+                    (3456 * .5)
+                ],
+                "hfov": 190
+            },
+            "right_circle": {
+                "center": [
+                    (3456 * 1.5),
+                    (3456 * .5)
+                ],
+                "hfov": 190,
+                "rotate": [
+                    0, 0, 0
+                ],
+                "translate": [
+                    0, 0, 0
+                ]
+            }
+        }
+        self.load_calibration_from_dict(reset_json)
 
+    def load_calibration(self):
+        try:
+            with open(self.calib_data_json_path) as f:
+                json_data = json.load(f)
+            self.load_calibration_from_dict(json_data)
+        except:
+            print("calibrated params not found.")
+            self.reset_calibration()
+
+    def load_calibration_from_dict(self, json_data):
         self.cir0_c = np.array(json_data['left_circle']['center']).astype(int)
         self.cir1_c = np.array(json_data['right_circle']['center']).astype(int)
         self.hfov0 = json_data['left_circle']['hfov'] * np.pi / 180
@@ -72,7 +104,10 @@ class DualSphereImg:
     def get_rotatation_basis(self):
         im = Image.open(self.img_path)
         exif_data = im._getexif()
-        USERCOMMENT = 37510
+        USERCOMMENT = None
+        for intval, strval in PIL.ExifTags.TAGS.items():
+            if strval == 'UserComment':
+                USERCOMMENT = intval
         raw_data = exif_data[USERCOMMENT]
         self.gyroBasis = np.array([e[0] for e in struct.iter_unpack('f', raw_data)]).reshape(-1,  3)
 
@@ -435,11 +470,6 @@ class DualSphereImg:
         xy_3d = xy_3d.dot(rotMat)
         xy_s = self.normalized_3d_to_equirectangle(xy_3d)
         xy_s = (xy_s + 1) * [(x_lim - 1) / 2, (y_lim - 1) / 2]
-
-        print(xy_s[:, 0].min())
-        print(xy_s[:, 0].max())
-        print(xy_s[:, 1].min())
-        print(xy_s[:, 1].max())
 
         xy_s = xy_s.reshape((x_lim, y_lim, 2))
 
