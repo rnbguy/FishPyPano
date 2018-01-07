@@ -5,6 +5,9 @@ FishPyPano works with ***Mi Sphere dual*** fisheye photos. I intend to make it w
 
 It takes two >180° HFOV/VFOV fisheye images and stitch them.
 
+### Comparison
+![FishPyPano Comparison](https://raw.githubusercontent.com/rnbdev/FishPyPano/master/img/comparison.jpg)
+
 ### Setup
 Before running, set up requirements, executing `pip install -r requirements.txt`
 
