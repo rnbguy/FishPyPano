@@ -16,7 +16,6 @@ The code offers two functions.
 1. Calibration - You have to do this one time. You give a list of matched points in the image from JSON file and it calibrates the lens parameters. After calibration it will generate a json file with the calibrated parameters.
    - I have cooked up a [html](https://codepen.io/ranadeep/full/XVaPwy/) page which you can use to generate the json file.
 2. Stitch - Pass the image and wait for the magic.
-   - For now, it dumps all the intermediate images for debugging.
 
 
 #### Contribute
