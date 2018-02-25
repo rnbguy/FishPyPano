@@ -1,6 +1,8 @@
 # FishPyPano
 Stitch two fish eye images to get 360° panorama
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/ranadeepb)
+
 FishPyPano works with ***Mi Sphere dual*** fisheye photos. I intend to make it work for any dual fisheye images.
 
 It takes two >180° HFOV/VFOV fisheye images and stitches them.
