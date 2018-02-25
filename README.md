@@ -20,3 +20,6 @@ The code offers two functions.
 
 #### Contribute
 Feel free to fork. Pull requests are most welcome. For any suggestion, open an issue.
+
+### Thank you
+[Chris Pebble](https://www.facebook.com/chris.pebble.1) for suggesting distortion functions.
